@@ -1,9 +1,7 @@
 "use client"
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
-import Node from './Node'; 
-import Edge from './Edge'; 
 
 interface NodeData extends SimulationNodeDatum {
   id: string;
@@ -22,7 +20,11 @@ interface MindMapCanvasProps {
 
 const MindMapCanvas: React.FC<MindMapCanvasProps> = ({ nodes, links }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-
+  const nodeRefs = useRef(new Map<string, SVGCircleElement>());
+  const linkRefs = useRef(new Map<string, SVGLineElement>());
+  const [updatedNodes, setUpdatedNodes] = useState(nodes);
+  const [updatedLinks, setUpdatedLinks] = useState(links)
+  
   useEffect(() => {
     if (!svgRef.current) return;
 
@@ -66,17 +68,18 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({ nodes, links }) => {
           event.subject.fx = event.x;
           event.subject.fy = event.y;
         }
+
+        // Note to my self: Do not remove this because it will reset drag
       
-        function dragended(event: d3.D3DragEvent<SVGCircleElement, NodeData, NodeData>) {
-          if (!event.active) simulation.alphaTarget(0);
-          event.subject.fx = null;
-          event.subject.fy = null;
-        }
+        // function dragended(event: d3.D3DragEvent<SVGCircleElement, NodeData, NodeData>) {
+        //   if (!event.active) simulation.alphaTarget(0);
+        //   event.subject.fx = null;
+        //   event.subject.fy = null;
+        // }
       
         return d3.drag<SVGCircleElement, NodeData>()
           .on('start', dragstarted)
-          .on('drag', dragged)
-          .on('end', dragended);
+          .on('drag', dragged);
       };
       
 
@@ -104,6 +107,8 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({ nodes, links }) => {
       label
         .attr('x', d => d.x!)
         .attr('y', d => d.y!);
+        setUpdatedNodes([...nodes]);
+        setUpdatedLinks([...links]);
     });
 
     return () => {
@@ -112,25 +117,33 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({ nodes, links }) => {
   }, [nodes, links]); 
 
   return (
-    <svg ref={svgRef} width={800} height={600}>
-      {links.map((link, index) => (
-        <Edge
-          key={`edge-${index}`}
-          source={{ x: (link.source as NodeData).x!, y: (link.source as NodeData).y! }}
-          target={{ x: (link.target as NodeData).x!, y: (link.target as NodeData).y! }}
-        />
-      ))}
-      {nodes.map(node => (
-        <Node
-          key={node.id}
-          id={node.id}
-          name={node.name}
-          x={node.x!}
-          y={node.y!}
-          onDrag={(id, dx, dy) => {
-          }}
-        />
-      ))}
+   <svg ref={svgRef} width={800} height={600}>
+      <g className="links">
+        {updatedLinks.map((link, index) => (
+          <line
+            key={`link-${index}`}
+            stroke="#999"
+            strokeWidth="2"
+            x1={(typeof link.source === 'object' ? link.source.x : 0) || 0}
+            y1={(typeof link.source === 'object' ? link.source.y : 0) || 0}
+            x2={(typeof link.target === 'object' ? link.target.x : 0) || 0}
+            y2={(typeof link.target === 'object' ? link.target.y : 0) || 0}
+          />
+        ))}
+      </g>
+      <g className="nodes">
+        {updatedNodes.map((node) => (
+          <circle
+            key={node.id}
+            cx={node.x}
+            cy={node.y}
+            r="5"
+            fill="blue"
+          >
+            <title>{node.name}</title>
+          </circle>
+        ))}
+      </g>
     </svg>
   );
 };
