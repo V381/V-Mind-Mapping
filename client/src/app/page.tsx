@@ -3,6 +3,13 @@ import React, { useState } from 'react';
 import MindMapCanvas from '@/app/components/min-map/MindMapCanvas.client';
 import EditNameModal from './components/min-map/EditNameModal';
 
+interface NodeData {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+}
+
 const initialNodes = [
   { id: '1', name: 'Start', x: 100, y: 150 },
 ];
@@ -21,7 +28,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentName, setCurrentName] = useState("");
 
-  const updateNodeName = (id, newName) => {
+  const updateNodeName = (id: string, newName: string) => {
     setNodes((prevNodes) =>
       prevNodes.map((node) =>
         node.id === id ? { ...node, name: newName } : node
@@ -29,27 +36,14 @@ export default function Home() {
     );
   };
   
+  const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleUpdateNodeName = (newName: string) => {
-    if (editingNode) {
-      updateNodeName(editingNode.id, newName);
-      setEditingNode(null);
-      setIsModalOpen(false);
-    }
-  };  const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleUpdateName = (newName) => {
-      setCurrentName(newName);
-      handleUpdateNodeName(newName);
-      handleCloseModal();
-    };
-
-  const handleEditNode = (node: NodeData) => {
+  const handleEditNode = (node: NodeData): void => {
     setEditingNode(node); 
     setCurrentName(node.name); 
     setIsModalOpen(true); 
   };
-
+  
   const addNode = () => {
     if (!newNodeName.trim()) return;
 
@@ -109,7 +103,23 @@ export default function Home() {
         }}}
         onClose={handleCloseModal}
       />
-      <MindMapCanvas nodes={nodes} links={links} updateNodeName={(node) => updateNodeName(node.id, node.name)} onEditNode={handleEditNode}
+      <MindMapCanvas
+       nodes={nodes} links={links.map(link => {
+        const sourceNode = typeof link.source === 'string' ? nodes.find(n => n.id === link.source) : link.source;
+        const targetNode = typeof link.target === 'string' ? nodes.find(n => n.id === link.target) : link.target;
+      
+        if (!sourceNode || !targetNode) {
+          throw new Error("Node not found.");
+        }
+      
+        return {
+          ...link,
+          source: sourceNode, 
+          target: targetNode, 
+        };
+      })}
+      updateNodeName={(node) => updateNodeName(node.id, node.name)} 
+      onEditNode={handleEditNode}
 />
     </main>
   );
