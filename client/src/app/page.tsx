@@ -71,7 +71,8 @@ export default function Home() {
       <ul className='pb-10'>
         <li>Enter node name</li>
         <li>Select node from drop down to connect to</li>
-        <li>Drag nodes by holdin mouse arrow on blue dot</li>
+        <li>Drag nodes by holding mouse arrow on blue dot</li>
+        <li>Click node text to edit text</li>
       </ul>
       <div className="flex flex-col space-y-2"> 
         <input
