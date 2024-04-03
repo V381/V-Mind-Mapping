@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import MindMapCanvas from '@/app/components/min-map/MindMapCanvas.client';
+import EditNameModal from './components/min-map/EditNameModal';
 
 const initialNodes = [
   { id: '1', name: 'Start', x: 100, y: 150 },
@@ -15,6 +16,39 @@ export default function Home() {
   const [links, setLinks] = useState(initialLinks);
   const [newNodeName, setNewNodeName] = useState('');
   const [selectedNode, setSelectedNode] = useState(nodes[nodes.length - 1].id);
+ 
+  const [editingNode, setEditingNode] = useState<NodeData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentName, setCurrentName] = useState("");
+
+  const updateNodeName = (id, newName) => {
+    setNodes((prevNodes) =>
+      prevNodes.map((node) =>
+        node.id === id ? { ...node, name: newName } : node
+      )
+    );
+  };
+  
+
+  const handleUpdateNodeName = (newName: string) => {
+    if (editingNode) {
+      updateNodeName(editingNode.id, newName);
+      setEditingNode(null);
+      setIsModalOpen(false);
+    }
+  };  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleUpdateName = (newName) => {
+      setCurrentName(newName);
+      handleUpdateNodeName(newName);
+      handleCloseModal();
+    };
+
+  const handleEditNode = (node: NodeData) => {
+    setEditingNode(node); 
+    setCurrentName(node.name); 
+    setIsModalOpen(true); 
+  };
 
   const addNode = () => {
     if (!newNodeName.trim()) return;
@@ -28,7 +62,7 @@ export default function Home() {
     };
 
     setNodes(nodes => [...nodes, newNode]);
-    setLinks(links => [...links, { source: selectedNode, target: newNodeId }]);
+    setLinks(links => [...links, { source: selectedNode, target: newNodeId, id: newNode.id }]);
     setNewNodeName('');
   };
 
@@ -60,7 +94,22 @@ export default function Home() {
         </select>
         <button onClick={addNode} className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">Add Node</button>
       </div>
-      <MindMapCanvas nodes={nodes} links={links}/>
+      <EditNameModal
+        isOpen={isModalOpen}
+        name={currentName}
+        onUpdate={(updatedName) => {
+          if (editingNode) {
+            setNodes((prevNodes) =>
+              prevNodes.map((node) =>
+                node.id === editingNode.id ? { ...node, name: updatedName } : node
+              )
+            );
+            setIsModalOpen(false);
+        }}}
+        onClose={handleCloseModal}
+      />
+      <MindMapCanvas nodes={nodes} links={links} updateNodeName={(node) => updateNodeName(node.id, node.name)} onEditNode={handleEditNode}
+/>
     </main>
   );
 }
