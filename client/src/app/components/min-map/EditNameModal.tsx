@@ -1,7 +1,15 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 
-const EditNameModal = ({ isOpen, name, onUpdate, onClose }) => {
+interface EditNameModalProps {
+  isOpen: boolean; 
+  name: string; 
+  onUpdate: (newName: string) => void; 
+  onClose: () => void;
+}
+
+
+const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, onUpdate, onClose }) => {
   const [newName, setNewName] = useState(name);
 
   useEffect(() => {
