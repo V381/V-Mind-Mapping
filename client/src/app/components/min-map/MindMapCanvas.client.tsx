@@ -98,7 +98,7 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
       .data(nodes, (d: NodeData) => d.id) 
       .join("circle")
       .classed("node", true)
-      .attr("r", 5)
+      .attr("r", 10)
       .attr("fill", "blue")
       .call(drag as any);  // NOTE TO SELF... any is antipattern, but complexity with D3/TypeScript/React made me set any for now
 
@@ -127,7 +127,7 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
     }
   }, [nodes, links]); 
 
-  return <svg ref={svgRef} width={800} height={600} />;
+  return <svg ref={svgRef} width={1024} height={800} className="border 1px mt-10" />;
 };
 
 export default MindMapCanvas;

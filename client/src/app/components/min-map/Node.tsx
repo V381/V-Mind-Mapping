@@ -32,7 +32,7 @@ const Node: React.FC<NodeProps> = ({ id, name, x, y, onDrag }) => {
       <circle
         cx={x}
         cy={y}
-        r={20} 
+        r={40} 
         fill="blue"
         onMouseDown={handleDragStart}
         onMouseMove={handleDrag}
