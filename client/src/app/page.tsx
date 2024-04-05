@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import MindMapCanvas from '@/app/components/min-map/MindMapCanvas.client';
 import EditNameModal from './components/min-map/EditNameModal';
+import { saveAs } from 'file-saver';
 
 interface NodeData {
   id: string;
@@ -66,6 +67,29 @@ export default function Home() {
       setIsModalOpen(false);
     }
   };
+
+  const saveMindMap = () => {
+    const svgElement = document.querySelector('svg');
+    if (!svgElement) return;
+  
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svgElement);
+    const svgBlob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+    const url = URL.createObjectURL(svgBlob);
+  
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = svgElement.clientWidth;
+      canvas.height = svgElement.clientHeight;
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(img, 0, 0);
+      canvas.toBlob((blob) => {
+        saveAs(blob, "mind_map.png");
+      }, 'image/png');
+    };
+    img.src = url;
+  };
     
     
   const addNode = () => {
@@ -117,6 +141,7 @@ export default function Home() {
           ))}
         </select>
         <button onClick={addNode} className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">Add Node</button>
+        <button onClick={saveMindMap} className="py-2 mb-4 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">Save Map To PNG</button>
       </div>
       <EditNameModal
         isOpen={isModalOpen}
