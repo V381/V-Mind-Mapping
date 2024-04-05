@@ -29,7 +29,7 @@ export default function Home() {
   const [editingNode, setEditingNode] = useState<NodeData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentName, setCurrentName] = useState("");
-  const [currentLineColor, setCurrentLineColor] = useState("#000000"); // Default line color or fetch from existing state
+  const [currentLineColor, setCurrentLineColor] = useState("#000000");
 
   const updateNodeName = (id: string, newName: string) => {
     setNodes((prevNodes) =>
