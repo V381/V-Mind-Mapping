@@ -91,10 +91,11 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
       <h1 className='text-3xl'>Instructions</h1>
       <ol className='pb-10'>
-        <li>Enter the node name.</li>
-        <li>Select a node from the dropdown to connect.</li>
-        <li>Drag nodes by holding the mouse cursor over the blue dot.</li>
-        <li>Click the node text to edit text and color of circle.</li>
+        <li>1. Enter the node name.</li>
+        <li>2. Select a node from the dropdown to connect.</li>
+        <li>3. Drag nodes by holding the mouse cursor over the blue dot.</li>
+        <li>4. Click the node text to edit text and color of circle.</li>
+        <li>5. You can also Zoom In/Zoom Out when your cursor/focus is in square</li>
       </ol>
       <div className="flex flex-col space-y-2"> 
         <input
