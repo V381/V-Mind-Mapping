@@ -95,7 +95,7 @@ export default function Home() {
       <EditNameModal
         isOpen={isModalOpen}
         name={currentName}
-        currentColor={editingNode ? editingNode.color : '#ffffff'} // Provide current color
+        currentColor={editingNode ? editingNode.color : '#ffffff'}
         onUpdate={(updatedName, updatedColor) => {
           if (editingNode) {
             setNodes((prevNodes) =>
