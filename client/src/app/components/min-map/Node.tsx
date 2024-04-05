@@ -32,6 +32,7 @@ const Node: React.FC<NodeProps> = ({ id, name, x, y, onDrag }) => {
       <circle
         cx={x}
         cy={y}
+        className='hover:cursor-pointer'
         r={40} 
         fill="blue"
         onMouseDown={handleDragStart}
