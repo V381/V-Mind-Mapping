@@ -121,7 +121,7 @@ export default function Home() {
         isOpen={isModalOpen}
         name={currentName}
         currentColor={editingNode ? editingNode.color : '#ffffff'}
-        currentLineColor={currentLink ? currentLink.color : '#000000'} // Pass current link color
+        currentLineColor={currentLink ? currentLink.color : '#000000'} 
         onUpdate={handleUpdate} 
         onClose={handleCloseModal}
       />
