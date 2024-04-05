@@ -5,18 +5,22 @@ interface EditNameModalProps {
   isOpen: boolean; 
   name: string;
   currentColor: string;
-  onUpdate: (newName: string, newColor: string) => void;
+  onUpdate: (newName: string, newColor: string, newLineColor: string) => void;
   onClose: () => void;
+  currentLineColor: string
 }
 
-const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, currentColor, onUpdate, onClose }) => {
+const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, currentColor, currentLineColor, onUpdate, onClose }) => {
   const [newName, setNewName] = useState(name);
   const [color, setColor] = useState(currentColor);
+  const [lineColor, setLineColor] = useState(currentLineColor);
+
 
   useEffect(() => {
     setNewName(name);
     setColor(currentColor);
-  }, [name, currentColor]);
+    setLineColor(currentLineColor);
+  }, [name, currentColor, currentLineColor]);
 
   if (!isOpen) {
     return null;
@@ -33,15 +37,25 @@ const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, currentColo
             onChange={(e) => setNewName(e.target.value)}
             className="input border-2 border-gray-200 rounded p-2 w-full text-black"
           />
+          <p className='text-black'>Change circle color</p>
           <input
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
             className="mt-4"
           />
+          <p className='text-black'>Change line color</p>
+           <input
+              type="color"
+              value={lineColor}
+              onChange={(e) => setLineColor(e.target.value)}
+              className="mt-4"
+            />
           <div className="flex justify-end space-x-2 mt-4">
-            <button onClick={() => onUpdate(newName, color)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">Update</button>
-            <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors">Cancel</button>
+          <button onClick={() => onUpdate(newName, color, lineColor)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+            Update
+          </button>            
+          <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors">Cancel</button>
           </div>
         </div>
       </div>

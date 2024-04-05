@@ -13,6 +13,7 @@ interface NodeData extends d3.SimulationNodeDatum {
 interface LinkData extends d3.SimulationLinkDatum<NodeData> {
   source: string | NodeData;
   target: string | NodeData;
+  color: string;
 }
 
 interface MindMapCanvasProps {
@@ -88,11 +89,12 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
 
-    svg.selectAll(".link")
+      svg.selectAll(".link")
       .data(processedLinks)
       .join("line")
       .classed("link", true)
-      .attr("stroke", "white");
+      .attr("stroke", d => d.color)
+      .attr("stroke-width", 2)
 
     svg.selectAll<SVGCircleElement, NodeData>(".node") 
       .data(nodes, (d: NodeData) => d.id) 
