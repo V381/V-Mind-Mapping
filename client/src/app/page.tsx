@@ -62,12 +62,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
-      <ul className='pb-10'>
-        <li>Enter node name</li>
-        <li>Select node from drop down to connect to</li>
-        <li>Drag nodes by holding mouse arrow on blue dot</li>
-        <li>Click node text to edit text</li>
-      </ul>
+      <h1 className='text-3xl'>Instructions</h1>
+      <ol className='pb-10'>
+        <li>Enter the node name.</li>
+        <li>Select a node from the dropdown to connect.</li>
+        <li>Drag nodes by holding the mouse cursor over the blue dot.</li>
+        <li>Click the node text to edit it.</li>
+      </ol>
       <div className="flex flex-col space-y-2"> 
         <input
           type="text"
