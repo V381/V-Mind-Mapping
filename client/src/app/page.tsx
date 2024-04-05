@@ -120,6 +120,7 @@ export default function Home() {
         <li>3. Drag nodes by holding the mouse cursor over the blue dot.</li>
         <li>4. Click the node text to edit text and color of circle.</li>
         <li>5. You can also Zoom In/Zoom Out when your cursor/focus is in square</li>
+        <li>6. Save Mind Map to PNG Image</li>
       </ol>
       <div className="flex flex-col space-y-2"> 
         <input
