@@ -8,10 +8,12 @@ interface NodeData {
   name: string;
   x: number;
   y: number;
+  color: string; 
 }
 
+
 const initialNodes = [
-  { id: '1', name: 'Start', x: 100, y: 150 },
+  { id: '1', name: 'Start', x: 100, y: 150, color: '#3490dc' },
 ];
 
 const initialLinks = [
@@ -46,17 +48,17 @@ export default function Home() {
   
   const addNode = () => {
     if (!newNodeName.trim()) return;
-
-    const newNodeId = (Math.max(...nodes.map(n => parseInt(n.id, 10))) + 1).toString();
+  
+    const newNodeId = (Math.max(...nodes.map(n => parseInt(n.id, 10)), 0) + 1).toString();
     const newNode = {
       id: newNodeId,
       name: newNodeName,
       x: Math.random() * 800,
-      y: Math.random() * 600, 
+      y: Math.random() * 600,
+      color: '#3490dc',
     };
-
+  
     setNodes(nodes => [...nodes, newNode]);
-    setLinks(links => [...links, { source: selectedNode, target: newNodeId, id: newNode.id }]);
     setNewNodeName('');
   };
 
@@ -67,7 +69,7 @@ export default function Home() {
         <li>Enter the node name.</li>
         <li>Select a node from the dropdown to connect.</li>
         <li>Drag nodes by holding the mouse cursor over the blue dot.</li>
-        <li>Click the node text to edit it.</li>
+        <li>Click the node text to edit text and color of circle.</li>
       </ol>
       <div className="flex flex-col space-y-2"> 
         <input
@@ -93,15 +95,17 @@ export default function Home() {
       <EditNameModal
         isOpen={isModalOpen}
         name={currentName}
-        onUpdate={(updatedName) => {
+        currentColor={editingNode ? editingNode.color : '#ffffff'} // Provide current color
+        onUpdate={(updatedName, updatedColor) => {
           if (editingNode) {
             setNodes((prevNodes) =>
               prevNodes.map((node) =>
-                node.id === editingNode.id ? { ...node, name: updatedName } : node
+                node.id === editingNode.id ? { ...node, name: updatedName, color: updatedColor } : node
               )
             );
             setIsModalOpen(false);
-        }}}
+          }
+        }}
         onClose={handleCloseModal}
       />
       <MindMapCanvas

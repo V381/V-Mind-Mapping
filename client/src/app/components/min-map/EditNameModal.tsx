@@ -3,18 +3,20 @@ import React, { useEffect, useState } from 'react';
 
 interface EditNameModalProps {
   isOpen: boolean; 
-  name: string; 
-  onUpdate: (newName: string) => void; 
+  name: string;
+  currentColor: string;
+  onUpdate: (newName: string, newColor: string) => void;
   onClose: () => void;
 }
 
-
-const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, onUpdate, onClose }) => {
+const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, currentColor, onUpdate, onClose }) => {
   const [newName, setNewName] = useState(name);
+  const [color, setColor] = useState(currentColor);
 
   useEffect(() => {
     setNewName(name);
-  }, [name]);
+    setColor(currentColor);
+  }, [name, currentColor]);
 
   if (!isOpen) {
     return null;
@@ -31,8 +33,14 @@ const EditNameModal: React.FC<EditNameModalProps> = ({ isOpen, name, onUpdate, o
             onChange={(e) => setNewName(e.target.value)}
             className="input border-2 border-gray-200 rounded p-2 w-full text-black"
           />
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="mt-4"
+          />
           <div className="flex justify-end space-x-2 mt-4">
-            <button onClick={() => onUpdate(newName)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">Update</button>
+            <button onClick={() => onUpdate(newName, color)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">Update</button>
             <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors">Cancel</button>
           </div>
         </div>

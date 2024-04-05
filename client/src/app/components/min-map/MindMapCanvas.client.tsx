@@ -7,6 +7,7 @@ interface NodeData extends d3.SimulationNodeDatum {
   name: string;
   x: number;
   y: number;
+  color: string;
 }
 
 interface LinkData extends d3.SimulationLinkDatum<NodeData> {
@@ -99,7 +100,7 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
       .join("circle")
       .classed("node", true)
       .attr("r", 10)
-      .attr("fill", "blue")
+      .attr("fill", d => d.color)
       .call(drag as any);  // NOTE TO SELF... any is antipattern, but complexity with D3/TypeScript/React made me set any for now
 
       svg.selectAll<SVGTextElement, NodeData>(".label")
