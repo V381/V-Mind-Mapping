@@ -17,7 +17,7 @@ const initialNodes = [
 ];
 
 const initialLinks = [
-  { source: '1', target: '1' },
+  { source: '1', target: '1', color: 'white' },
 ];
 
 export default function Home() {
@@ -29,6 +29,7 @@ export default function Home() {
   const [editingNode, setEditingNode] = useState<NodeData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentName, setCurrentName] = useState("");
+  const [currentLineColor, setCurrentLineColor] = useState("#000000"); // Default line color or fetch from existing state
 
   const updateNodeName = (id: string, newName: string) => {
     setNodes((prevNodes) =>
@@ -45,7 +46,28 @@ export default function Home() {
     setCurrentName(node.name); 
     setIsModalOpen(true); 
   };
-  
+
+  const currentLink = links[0];
+
+  const handleUpdate = (newName: string, newColor: string, newLineColor: string) => {
+    if (editingNode) {
+      setNodes((prevNodes) =>
+        prevNodes.map((node) =>
+          node.id === editingNode.id ? { ...node, name: newName, color: newColor } : node
+        )
+      );
+      setLinks((prevLinks) =>
+        prevLinks.map((link) =>
+          link.source === editingNode.id || link.target === editingNode.id
+            ? { ...link, color: newLineColor }
+            : link
+        )
+      );
+      setIsModalOpen(false);
+    }
+  };
+    
+    
   const addNode = () => {
     if (!newNodeName.trim()) return;
   
@@ -57,9 +79,11 @@ export default function Home() {
       y: Math.random() * 600,
       color: '#3490dc',
     };
+
+    const defaultLinkColor = '#999999'; 
   
     setNodes(nodes => [...nodes, newNode]);
-    setLinks(links => [...links, { source: selectedNode, target: newNodeId }]);
+    setLinks(links => [...links, { source: selectedNode, target: newNodeId, color: defaultLinkColor }]);
     setNewNodeName('');
   };
 
@@ -97,16 +121,8 @@ export default function Home() {
         isOpen={isModalOpen}
         name={currentName}
         currentColor={editingNode ? editingNode.color : '#ffffff'}
-        onUpdate={(updatedName, updatedColor) => {
-          if (editingNode) {
-            setNodes((prevNodes) =>
-              prevNodes.map((node) =>
-                node.id === editingNode.id ? { ...node, name: updatedName, color: updatedColor } : node
-              )
-            );
-            setIsModalOpen(false);
-          }
-        }}
+        currentLineColor={currentLink ? currentLink.color : '#000000'} // Pass current link color
+        onUpdate={handleUpdate} 
         onClose={handleCloseModal}
       />
       <MindMapCanvas
