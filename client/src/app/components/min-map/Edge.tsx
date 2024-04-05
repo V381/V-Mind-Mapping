@@ -14,7 +14,7 @@ const Edge: React.FC<EdgeProps> = ({ source, target }) => {
       y1={source.y}
       x2={target.x}
       y2={target.y}
-      stroke="white" 
+      stroke="red" 
       strokeWidth={2} 
     />
   );

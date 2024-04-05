@@ -88,12 +88,11 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
 
-
     svg.selectAll(".link")
       .data(processedLinks)
       .join("line")
       .classed("link", true)
-      .attr("stroke", "#999");
+      .attr("stroke", "white");
 
     svg.selectAll<SVGCircleElement, NodeData>(".node") 
       .data(nodes, (d: NodeData) => d.id) 
@@ -122,6 +121,8 @@ const MindMapCanvas: React.FC<MindMapCanvasProps> = ({
         linkForce.links(processedLinks);
       }  
       simulation.alpha(1).restart();
+
+      
 
     return () => {
       simulation.stop();

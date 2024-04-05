@@ -59,6 +59,7 @@ export default function Home() {
     };
   
     setNodes(nodes => [...nodes, newNode]);
+    setLinks(links => [...links, { source: selectedNode, target: newNodeId }]);
     setNewNodeName('');
   };
 
