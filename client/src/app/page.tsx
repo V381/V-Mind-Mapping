@@ -85,7 +85,7 @@ export default function Home() {
       const ctx = canvas.getContext('2d');
       ctx?.drawImage(img, 0, 0);
       canvas.toBlob((blob) => {
-        saveAs(blob, "mind_map.png");
+        saveAs(blob as any, "mind_map.png");
       }, 'image/png');
     };
     img.src = url;
